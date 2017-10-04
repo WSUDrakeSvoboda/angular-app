@@ -14,7 +14,7 @@ angular.module('resources.tasks').factory('Tasks', ['mongolabResource', function
   };
 
   Tasks.forUser = function (userId) {
-    return Tasks.query({userId:userId});
+    return Tasks.query({assignedUserId:userId});
   };
 
   Tasks.forProject = function (projectId) {

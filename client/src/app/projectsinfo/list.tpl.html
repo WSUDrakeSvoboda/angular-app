@@ -1,1 +1,16 @@
 <h3>Projects info</h3>
+<a href="/projects">Go To My Projects</a>
+<table class="table table-bordered table-condensed table-striped table-hover">
+	<thead>
+		<tr>
+			<th class="span3">Name</th>
+			<th class="span5">Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="project in projects">
+			<td>{{project.name}}</td>
+			<td>{{project.desc}}</td>
+		</tr>
+	</tbody>
+</table>

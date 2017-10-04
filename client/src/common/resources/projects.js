@@ -1,11 +1,14 @@
-angular.module('resources.projects', ['mongolabResource']);
+ angular.module('resources.projects', ['mongolabResource']);
 angular.module('resources.projects').factory('Projects', ['mongolabResource', function ($mongolabResource) {
 
   var Projects = $mongolabResource('projects');
 
   Projects.forUser = function(userId, successcb, errorcb) {
-    //TODO: get projects for this user only (!)
-    return Projects.query({}, successcb, errorcb);
+	  return Projects.all().then(function (result) {
+		  return result.filter(function (x) {
+			  return x.isDevTeamMember(userId) || x.isScrumMaster(userId) || x.isProductOwner(userId);
+		  });
+	  })
   };
 
   Projects.prototype.isProductOwner = function (userId) {

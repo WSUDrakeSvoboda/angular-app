@@ -55,12 +55,14 @@ angular.module('directives.crud.edit', [])
       // - e.g. ng-click="save()"
       scope.save = function() {
         resource.$saveOrUpdate(onSave, onSave, onError, onError);
-      };
+	  };
+
       scope.revertChanges = function() {
         resource = angular.copy(original);
         resourceSetter(scope, resource);
         form.$setPristine();
-      };
+	  };
+
       scope.remove = function() {
         if(resource.$id()) {
           resource.$remove(onRemove, onError);
