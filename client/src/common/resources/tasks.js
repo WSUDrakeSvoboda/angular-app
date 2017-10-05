@@ -21,5 +21,20 @@ angular.module('resources.tasks').factory('Tasks', ['mongolabResource', function
 		return Tasks.query({ projectId: projectId });
 	};
 
+	Tasks.watchedBy = function (userId) {
+		return Tasks.all().then(function (result) {
+			return result.filter(function (x) {
+				return x.isWatchedBy(userId);
+			});
+		});
+	}
+
+	Tasks.prototype.isWatchedBy = function (userId) {
+		if (this.usersWatching) {
+			return this.usersWatching.indexOf(userId) >= 0;
+		}
+		return;
+	}
+
 	return Tasks;
 }]);

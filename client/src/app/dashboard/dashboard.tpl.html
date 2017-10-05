@@ -24,3 +24,27 @@
 		</tr>
 	</tbody>
 </table>
+
+
+<h4>Watched Tasks</h4>
+<table class="table table-bordered table-condensed table-striped table-hover">
+	<thead>
+		<tr>
+			<th class="span8">Name</th>
+			<th class="span1">Estimation</th>
+			<th class="span1">Remaining</th>
+			<th class="span2">Tools</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="task in watching">
+			<td>{{task.name}}</td>
+			<td>{{task.estimation}}</td>
+			<td>{{task.remaining}}</td>
+			<td></td>
+		</tr>
+		<tr ng-show="!watching.length">
+			<td colspan="4">You are not watching any tasks</td>
+		</tr>
+	</tbody>
+</table>

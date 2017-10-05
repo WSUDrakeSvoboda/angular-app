@@ -26,6 +26,7 @@ angular.module('directives.crud.edit', [])
 						throw new Error('crudEdit directive: The resource must expose the ' + methodName + '() instance method');
 					}
 				};
+
 				checkResourceMethod('$saveOrUpdate');
 				checkResourceMethod('$id');
 				checkResourceMethod('$remove');

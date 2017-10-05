@@ -33,7 +33,10 @@ angular.module('tasks', ['resources.tasks', 'services.crud'])
 					});
 				}],
 				sprintBacklogItems: sprintBacklogItems,
-				teamMembers: teamMembers
+				teamMembers: teamMembers,
+				user: ['security', function (security) {
+					return null;
+				}]
 			})
 
 			.whenEdit({
@@ -41,7 +44,10 @@ angular.module('tasks', ['resources.tasks', 'services.crud'])
 					return Tasks.getById($route.current.params.itemId);
 				}],
 				sprintBacklogItems: sprintBacklogItems,
-				teamMembers: teamMembers
+				teamMembers: teamMembers,
+				user: ['security', function (security) {
+					return security.requestCurrentUser();
+				}]
 			});
 	}])
 
@@ -53,16 +59,26 @@ angular.module('tasks', ['resources.tasks', 'services.crud'])
 		angular.extend($scope, crudListMethods('/projects/' + projectId + '/sprints/' + sprintId + '/tasks'));
 	}])
 
-	.controller('TasksEditCtrl', ['$scope', '$location', '$route', 'Tasks', 'sprintBacklogItems', 'teamMembers', 'task', function ($scope, $location, $route, Tasks, sprintBacklogItems, teamMembers, task) {
-		$scope.task = task;
-		$scope.statesEnum = Tasks.statesEnum;
-		$scope.sprintBacklogItems = sprintBacklogItems;
-		$scope.teamMembers = teamMembers;
+	.controller('TasksEditCtrl', [
+		'$scope', '$location', '$route', 'Tasks', 'sprintBacklogItems', 'teamMembers', 'task', 'user',
+		function ($scope, $location, $route, Tasks, sprintBacklogItems, teamMembers, task, user) {
+			$scope.task = task;
+			$scope.user = user;
+			$scope.statesEnum = Tasks.statesEnum;
+			$scope.sprintBacklogItems = sprintBacklogItems;
+			$scope.teamMembers = teamMembers;
 
-		$scope.onSave = function () {
-			$location.path('/admin/users');
-		};
-		$scope.onError = function () {
-			$scope.updateError = true;
-		};
-	}]);
+			$scope.task.usersWatching = $scope.task.usersWatching || [];
+
+			$scope.onSave = function () {
+				$location.path('/admin/users');
+			};
+			$scope.onError = function () {
+				$scope.updateError = true;
+			};
+			$scope.addWatchingUser = function (userID) {
+				$scope.task.usersWatching.push(userID);
+
+				$scope.task.$saveOrUpdate()
+			};
+		}]);

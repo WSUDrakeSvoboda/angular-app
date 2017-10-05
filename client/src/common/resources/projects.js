@@ -8,7 +8,7 @@ angular.module('resources.projects').factory('Projects', ['mongolabResource', fu
 			return result.filter(function (x) {
 				return x.isDevTeamMember(userId) || x.isScrumMaster(userId) || x.isProductOwner(userId);
 			});
-		})
+		});
 	};
 
 	Projects.prototype.isProductOwner = function (userId) {
@@ -24,7 +24,10 @@ angular.module('resources.projects').factory('Projects', ['mongolabResource', fu
 		return !this.isProductOwner(userId);
 	};
 	Projects.prototype.isDevTeamMember = function (userId) {
-		return this.teamMembers.indexOf(userId) >= 0;
+		if (this.teamMembers) {
+			return this.teamMembers.indexOf(userId) >= 0;
+		}
+		return;
 	};
 	Projects.prototype.canActAsDevTeamMember = function (userId) {
 		return !this.isProductOwner(userId);
