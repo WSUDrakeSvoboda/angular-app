@@ -9,6 +9,7 @@ angular.module('app', [
 	'services.httpRequestTracker',
 	'security',
 	'directives.crud',
+	'directives.comment',
 	'templates.app',
 	'templates.common']);
 

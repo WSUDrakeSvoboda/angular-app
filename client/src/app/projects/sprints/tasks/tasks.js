@@ -70,15 +70,18 @@ angular.module('tasks', ['resources.tasks', 'services.crud'])
 
 			$scope.task.usersWatching = $scope.task.usersWatching || [];
 
+			//Expose comments member for comment directive
+			$scope.task.comments = $scope.task.comments || [];
+
 			$scope.onSave = function () {
-				$location.path('/admin/users');
+				//$location.path('/admin/users');
 			};
 			$scope.onError = function () {
 				$scope.updateError = true;
 			};
 			$scope.addWatchingUser = function (userID) {
-				$scope.task.usersWatching.push(userID);
 
+				$scope.task.usersWatching.push(userID);
 				$scope.task.$saveOrUpdate()
 			};
 		}]);
