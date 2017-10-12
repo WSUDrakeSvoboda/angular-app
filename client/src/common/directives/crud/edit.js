@@ -42,19 +42,27 @@ angular.module('directives.crud.edit', [])
 				// Set up callbacks with fallback
 				// onSave attribute -> onSave scope -> noop
 				var userOnSave = attrs.onSave ? makeFn('onSave') : (scope.onSave || angular.noop);
+
 				var onSave = function (result, status, headers, config) {
 					// Reset the original to help with reverting and pristine checks
 					original = result;
 					userOnSave(result, status, headers, config);
 				};
+
 				// onRemove attribute -> onRemove scope -> onSave attribute -> onSave scope -> noop
 				var onRemove = attrs.onRemove ? makeFn('onRemove') : (scope.onRemove || onSave);
 				// onError attribute -> onError scope -> noop
 				var onError = attrs.onError ? makeFn('onError') : (scope.onError || angular.noop);
 
+				var beforeSave = attrs.beforeSave ? makeFn('beforeSave') : (scope.beforeSave || angular.noop);
+
+				var beforeRemove = attrs.beforeRemove ? makeFn('beforeRemove') : (scope.beforeRemove || angular.noop);
+
+
 				// The following functions should be triggered by elements on the form
 				// - e.g. ng-click="save()"
 				scope.save = function () {
+					beforeSave();
 					resource.$saveOrUpdate(onSave, onSave, onError, onError);
 				};
 
@@ -66,6 +74,7 @@ angular.module('directives.crud.edit', [])
 
 				scope.remove = function () {
 					if (resource.$id()) {
+						beforeRemove();
 						resource.$remove(onRemove, onError);
 					} else {
 						onRemove();

@@ -27,14 +27,14 @@ angular.module('resources.tasks').factory('Tasks', ['mongolabResource', function
 				return x.isWatchedBy(userId);
 			});
 		});
-	}
+	};
 
 	Tasks.prototype.isWatchedBy = function (userId) {
 		if (this.usersWatching) {
-			return this.usersWatching.indexOf(userId) >= 0;
+			return this.usersWatching.map(function (x) { return x.userId; }).indexOf(userId) >= 0;
 		}
 		return;
-	}
+	};
 
 	return Tasks;
 }]);

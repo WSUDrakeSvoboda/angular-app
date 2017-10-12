@@ -15,7 +15,7 @@ angular
 								tasks: response[0],
 								projects: response[1],
 								watching: response[2]
-							}
+							};
 						});
 
 					});
@@ -31,11 +31,28 @@ angular
 		$scope.user = properties.user;
 		$scope.watching = properties.watching;
 
+		$scope.watching.forEach(function (task) {
+			var watchingPair = task.usersWatching.find(function (watching) {
+				return watching.userId == $scope.user.id;
+			});
+
+			console.log(watchingPair);
+
+			if (watchingPair.updated) { task.updated = true; }
+		});
+
+		console.log($scope.watching);
+
 		$scope.manageBacklog = function (projectId) {
 			$location.path('/projects/' + projectId + '/productbacklog');
 		};
 
 		$scope.manageSprints = function (projectId) {
 			$location.path('/projects/' + projectId + '/sprints');
+		};
+
+		$scope.manageTask = function (task) {
+			console.log(task);
+			$location.path('/projects/' + task.projectId + '/sprints/' + task.sprintId + '/tasks/' + task._id.$oid);
 		};
 	}]);

@@ -9,15 +9,13 @@
 			<th class="span8">Name</th>
 			<th class="span1">Estimation</th>
 			<th class="span1">Remaining</th>
-			<th class="span2">Tools</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="task in tasks">
+		<tr ng-repeat="task in tasks" ng-click="manageTask(task)">
 			<td>{{task.name}}</td>
 			<td>{{task.estimation}}</td>
 			<td>{{task.remaining}}</td>
-			<td></td>
 		</tr>
 		<tr ng-show="!tasks.length">
 			<td colspan="4">No tasks for you!</td>
@@ -33,15 +31,13 @@
 			<th class="span8">Name</th>
 			<th class="span1">Estimation</th>
 			<th class="span1">Remaining</th>
-			<th class="span2">Tools</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="task in watching">
-			<td>{{task.name}}</td>
-			<td>{{task.estimation}}</td>
-			<td>{{task.remaining}}</td>
-			<td></td>
+		<tr ng-repeat="task in watching" ng-click="manageTask(task)">
+			<td ng-class="{'updated': task.updated}">{{task.name}}<small ng-show="task.updated"> - UPDATED</small></td>
+			<td ng-class="{'updated': task.updated}">{{task.estimation}}</td>
+			<td ng-class="{'updated': task.updated}">{{task.remaining}}</td>
 		</tr>
 		<tr ng-show="!watching.length">
 			<td colspan="4">You are not watching any tasks</td>

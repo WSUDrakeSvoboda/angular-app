@@ -3,7 +3,7 @@ angular.module('admin-users-edit-uniqueEmail', ['resources.users'])
 	/**
 	 * A validation directive to ensure that the model contains a unique email address
 	 * @param  Users service to provide access to the server's user database
-	  */
+	*/
 	.directive('uniqueEmail', ["Users", function (Users) {
 		return {
 			require: 'ngModel',

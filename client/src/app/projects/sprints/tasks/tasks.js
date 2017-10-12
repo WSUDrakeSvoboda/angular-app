@@ -60,8 +60,8 @@ angular.module('tasks', ['resources.tasks', 'services.crud'])
 	}])
 
 	.controller('TasksEditCtrl', [
-		'$scope', '$location', '$route', 'Tasks', 'sprintBacklogItems', 'teamMembers', 'task', 'user',
-		function ($scope, $location, $route, Tasks, sprintBacklogItems, teamMembers, task, user) {
+		'$scope', '$location', '$route', '$q', 'Tasks', 'sprintBacklogItems', 'teamMembers', 'task', 'user',
+		function ($scope, $location, $route, $q, Tasks, sprintBacklogItems, teamMembers, task, user) {
 			$scope.task = task;
 			$scope.user = user;
 			$scope.statesEnum = Tasks.statesEnum;
@@ -73,15 +73,25 @@ angular.module('tasks', ['resources.tasks', 'services.crud'])
 			//Expose comments member for comment directive
 			$scope.task.comments = $scope.task.comments || [];
 
-			$scope.onSave = function () {
-				//$location.path('/admin/users');
-			};
+			var watchPairIndex = $scope.task.usersWatching.findIndex(function (watchPair) {
+				return watchPair.userId == user.id
+			});
+
+			if (watchPairIndex >= 0) {
+				$scope.task.usersWatching[watchPairIndex].updated = false;
+				$scope.task.$saveOrUpdate();
+			}
+
 			$scope.onError = function () {
 				$scope.updateError = true;
 			};
-			$scope.addWatchingUser = function (userID) {
 
-				$scope.task.usersWatching.push(userID);
-				$scope.task.$saveOrUpdate()
+			$scope.beforeSave = function () {
+				$scope.task.usersWatching = $scope.task.usersWatching.map(function (x) { return { userId: x.userId, updated: true }; });
+			};
+
+			$scope.addWatchingUser = function (userId) {
+				$scope.task.usersWatching.push({ userId: userId, updated: false });
+				$scope.task.$saveOrUpdate();
 			};
 		}]);
