@@ -53,7 +53,6 @@ angular.module('tasks', ['resources.tasks', 'services.crud'])
 
 	.controller('TasksListCtrl', ['$scope', 'crudListMethods', '$route', 'tasks', function ($scope, crudListMethods, $route, tasks) {
 		$scope.tasks = tasks;
-
 		var projectId = $route.current.params.projectId;
 		var sprintId = $route.current.params.sprintId;
 		angular.extend($scope, crudListMethods('/projects/' + projectId + '/sprints/' + sprintId + '/tasks'));

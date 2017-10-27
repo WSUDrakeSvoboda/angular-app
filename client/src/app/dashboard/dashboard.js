@@ -43,12 +43,12 @@ angular
 
 		console.log($scope.watching);
 
-		$scope.manageBacklog = function (projectId) {
-			$location.path('/projects/' + projectId + '/productbacklog');
+		$scope.manageBacklog = function (project) {
+			$location.path('/projects/' + project._id.$oid + '/productbacklog');
 		};
 
-		$scope.manageSprints = function (projectId) {
-			$location.path('/projects/' + projectId + '/sprints');
+		$scope.manageSprints = function (project) {
+			$location.path('/projects/' + project._id.$oid + '/sprints');
 		};
 
 		$scope.manageTask = function (task) {

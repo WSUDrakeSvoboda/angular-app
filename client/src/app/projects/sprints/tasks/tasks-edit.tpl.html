@@ -1,7 +1,5 @@
 <form name="form" crud-edit="task">
-	<button class="btn btn-small" ng-click="addWatchingUser(user.id)" ng-disabled="!user.id || task.isWatchedBy(user.id)">
-		Watch This Task
-	</button>
+
 	<div class="well">
 		<div class="row-fluid">
 			<div class="span6">
@@ -26,6 +24,10 @@
 		</div>
 		<hr>
 		<crud-buttons></crud-buttons>
+
+		<button class="btn btn-small" ng-click="addWatchingUser(user.id)" ng-disabled="!user.id || task.isWatchedBy(user.id)">
+			Watch This Task
+		</button>
 	</div>
 </form>
 
