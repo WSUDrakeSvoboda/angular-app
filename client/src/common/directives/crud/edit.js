@@ -26,9 +26,16 @@ angular.module('directives.crud.edit', [])
 						throw new Error('crudEdit directive: The resource must expose the ' + methodName + '() instance method');
 					}
 				};
+
 				checkResourceMethod('$saveOrUpdate');
+				checkResourceMethod('$saveAsHistory');
 				checkResourceMethod('$id');
 				checkResourceMethod('$remove');
+				checkResourceMethod('$allHistory');
+
+				scope.allHistory = resource.$allHistory().then(function (response) { return response; });
+
+				console.log(scope.allHistory);
 
 				// This function helps us extract the callback functions from the directive attributes
 				var makeFn = function (attrName) {
@@ -51,9 +58,17 @@ angular.module('directives.crud.edit', [])
 				// onError attribute -> onError scope -> noop
 				var onError = attrs.onError ? makeFn('onError') : (scope.onError || angular.noop);
 
+			
 				// The following functions should be triggered by elements on the form
 				// - e.g. ng-click="save()"
 				scope.save = function () {
+					resource.timestamp = Date.now(); //Mark time of update or save
+					original.timestamp = resource.timestamp;
+
+					original.$saveAsHistory(onSave, onError); //Save old resource as history
+
+					this.historyFor = null;
+
 					resource.$saveOrUpdate(onSave, onSave, onError, onError);
 				};
 
