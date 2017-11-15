@@ -124,7 +124,6 @@ angular.module('mongolabResource', []).factory('mongolabResource', ['MONGOLAB_CO
 		};
 
 
-
 		return Resource;
 	}
 	return MongolabResourceFactory;

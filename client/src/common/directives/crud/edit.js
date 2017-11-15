@@ -10,6 +10,25 @@ angular.module('directives.crud.edit', [])
 			scope: true,
 			// We need access to a form so we require a FormController from this element or a parent element
 			require: '^form',
+			controller: ['$scope', '$element', '$attrs', '$parse',
+				function ($scope, $element, $attrs, $parse) {
+					// observe changes in attribute - could also be scope.$watch
+					$attrs.$observe('crudEdit', function (value) {
+						if (value) {
+							// pass value to app controller
+							var resourceGetter = $parse(value);
+							var resourceSetter = resourceGetter.assign;
+
+							$scope.resource = resourceGetter($scope);
+							// Store a copy for reverting the changes
+							$scope.original = angular.copy($scope.resource);
+						}
+					});
+
+
+					
+				}
+			],
 			// This directive can only appear as an attribute
 			link: function (scope, element, attrs, form) {
 				// We extract the value of the crudEdit attribute
@@ -31,11 +50,7 @@ angular.module('directives.crud.edit', [])
 				checkResourceMethod('$saveAsHistory');
 				checkResourceMethod('$id');
 				checkResourceMethod('$remove');
-				checkResourceMethod('$allHistory');
 
-				scope.allHistory = resource.$allHistory().then(function (response) { return response; });
-
-				console.log(scope.allHistory);
 
 				// This function helps us extract the callback functions from the directive attributes
 				var makeFn = function (attrName) {
@@ -58,7 +73,7 @@ angular.module('directives.crud.edit', [])
 				// onError attribute -> onError scope -> noop
 				var onError = attrs.onError ? makeFn('onError') : (scope.onError || angular.noop);
 
-			
+
 				// The following functions should be triggered by elements on the form
 				// - e.g. ng-click="save()"
 				scope.save = function () {

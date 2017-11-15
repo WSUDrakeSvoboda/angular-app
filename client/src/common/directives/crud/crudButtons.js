@@ -4,14 +4,13 @@ angular.module('directives.crud.buttons', [])
 		return {
 			restrict: 'E',
 			replace: true,
+			require: '^crudEdit',
 			template:
 			'<div>' +
 			'	<button type="button" class="btn btn-primary save" ng-disabled="!canSave()" ng-click="save()">Save</button>' +
 			'	<button type="button" class="btn btn-warning revert" ng-click="revertChanges()" ng-disabled="!canRevert()">Revert changes</button>' +
 			'	<button type="button" class="btn btn-danger remove" ng-click="remove()" ng-show="canRemove()">Remove</button>' +
-			'	<select>' +
-			'		<option ng-repeat="history in allHistory">{{history.timestamp | date:\'medium\'}}</option>' +
-			'	</select>' +
+			'	<history-select></history-select>' +
 			'</div>'
 			
 		};
