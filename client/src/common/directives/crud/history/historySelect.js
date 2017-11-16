@@ -10,11 +10,24 @@
 			scope: true,
 			require: '^crudEdit',
 			restrict: 'E',
+			replace: true,
+			template:	'<span class="revert-block">' +
+							'<button type="button" class="btn btn-warning revert" ng-click="toggleHistory()">Revert changes</button>' +
+							'<span class="history-select" ng-disabled="!displayHistory">' +
+								'<a ng-repeat="item in history | orderBy:\'timestamp\':true" ng-click="revert(item)" ng-disabled="!canRevertTo(item)">{{item.timestamp | date:"medium"}} </a>' +
+							'</div>' +
+						'</div>',
 			link: function (scope, element, attrs, crudEdit) {
-				console.log(crudEdit);
-				
-			
-				crudEdit.revertToId();
+				scope.displayHistory = false;
+
+				scope.toggleHistory = function () {
+					scope.displayHistory = !scope.displayHistory;
+				}
+
+				scope.revert = function (resource) {
+					scope.displayHistory = false;
+					scope.revertTo(resource);
+				}
 			}
 		};
 	});

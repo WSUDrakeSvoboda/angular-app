@@ -120,7 +120,7 @@ angular.module('mongolabResource', []).factory('mongolabResource', ['MONGOLAB_CO
 		};
 
 		Resource.prototype.$allHistory = function (cb, errorcb) {
-			return Resource.queryHistory({ historyFor: this.id }, cb, errorcb).then(function (response) { return response; });
+			return Resource.queryHistory({ historyFor: this.id }, cb, errorcb);
 		};
 
 

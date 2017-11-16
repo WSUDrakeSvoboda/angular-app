@@ -1,0 +1,35 @@
+﻿
+.revert-block {
+	display: inline-block;
+	position:relative;
+}
+
+.history-select {
+	position: absolute;
+	bottom: 0;
+	left: 110%;
+	width: auto;
+	background-color: #fff;
+	border: 1px solid #e3e3e3;
+	padding: 10px;
+	border-radius: 4px;
+	overflow-y: scroll;
+
+	&[disabled="disabled"] {
+		display: none;
+	}
+
+	a {
+		display: block;
+		padding: 6px 0;
+		border-bottom: 1px solid #e3e3e3;
+		max-height: 150px;
+		white-space: nowrap;
+		cursor: pointer;
+
+		&[disabled="disabled"] {
+			pointer-events: none;
+			color: #999;
+		}
+	}
+}

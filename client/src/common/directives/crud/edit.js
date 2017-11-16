@@ -19,14 +19,14 @@ angular.module('directives.crud.edit', [])
 							var resourceGetter = $parse(value);
 							var resourceSetter = resourceGetter.assign;
 
-							$scope.resource = resourceGetter($scope);
-							// Store a copy for reverting the changes
-							$scope.original = angular.copy($scope.resource);
+							var resource = resourceGetter($scope);
+
+							resource.$allHistory().then(function (response) {
+								$scope.history = response;
+								$scope.history.unshift(resource);
+							});
 						}
 					});
-
-
-					
 				}
 			],
 			// This directive can only appear as an attribute
@@ -60,6 +60,7 @@ angular.module('directives.crud.edit', [])
 					}
 					return fn;
 				};
+
 				// Set up callbacks with fallback
 				// onSave attribute -> onSave scope -> noop
 				var userOnSave = attrs.onSave ? makeFn('onSave') : (scope.onSave || angular.noop);
@@ -68,17 +69,16 @@ angular.module('directives.crud.edit', [])
 					original = result;
 					userOnSave(result, status, headers, config);
 				};
+
 				// onRemove attribute -> onRemove scope -> onSave attribute -> onSave scope -> noop
 				var onRemove = attrs.onRemove ? makeFn('onRemove') : (scope.onRemove || onSave);
 				// onError attribute -> onError scope -> noop
 				var onError = attrs.onError ? makeFn('onError') : (scope.onError || angular.noop);
 
-
 				// The following functions should be triggered by elements on the form
 				// - e.g. ng-click="save()"
 				scope.save = function () {
 					resource.timestamp = Date.now(); //Mark time of update or save
-					original.timestamp = resource.timestamp;
 
 					original.$saveAsHistory(onSave, onError); //Save old resource as history
 
@@ -86,12 +86,14 @@ angular.module('directives.crud.edit', [])
 
 					resource.$saveOrUpdate(onSave, onSave, onError, onError);
 				};
-
-				scope.revertChanges = function () {
-					resource = angular.copy(original);
+				
+				scope.revertTo = function (newResource) {
+					newResource.historyFor = null;
+					newResource._id = resource._id;
+					resource = angular.copy(newResource);
 					resourceSetter(scope, resource);
-					form.$setPristine();
-				};
+					form.$setDirty();
+				}
 
 				scope.remove = function () {
 					if (resource.$id()) {
@@ -106,9 +108,11 @@ angular.module('directives.crud.edit', [])
 				scope.canSave = function () {
 					return form.$valid && !angular.equals(resource, original);
 				};
-				scope.canRevert = function () {
-					return !angular.equals(resource, original);
+
+				scope.canRevertTo = function (newResource) {
+					return !angular.equals(resource, newResource);
 				};
+
 				scope.canRemove = function () {
 					return resource.$id();
 				};
@@ -133,6 +137,8 @@ angular.module('directives.crud.edit', [])
 				scope.showError = function (fieldName, error) {
 					return form[fieldName].$error[error];
 				};
+
+
 			}
 		};
 	}]);
