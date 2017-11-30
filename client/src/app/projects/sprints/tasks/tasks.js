@@ -1,4 +1,4 @@
-angular.module('tasks', ['resources.tasks', 'services.crud'])
+angular.module('tasks', ['resources.tasks', 'services.crud', 'security.service'])
 
 	.config(['crudRouteProvider', function (crudRouteProvider) {
 
@@ -76,9 +76,9 @@ angular.module('tasks', ['resources.tasks', 'services.crud'])
 			$scope.onError = function () {
 				$scope.updateError = true;
 			};
-			$scope.addWatchingUser = function (userID) {
-				$scope.task.usersWatching.push(userID);
 
-				$scope.task.$saveOrUpdate()
+			$scope.watch = function () {
+				$scope.task.usersWatching.push(user.id);
+				$scope.task.$saveOrUpdate();
 			};
 		}]);
